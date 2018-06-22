@@ -6,14 +6,19 @@ const app = express()
 
 const port = process.env.PORT || 3000
 
+app.use(morgan('dev'))
+app.use(bodyParser.json())
+
 app.get('/ping', function (req, res) {
-  res.status(200).send({message: "pong"})
+  res.send({message: "pong"})
 })
 
 
 
 app.use(function (req,res,next) {
-  next({status: 404, message: "Route not found"})
+  const status = 404
+  const message = `Could not ${req.method} ${req.url}`
+  next({status, message})
 })
 
 app.use(function (err,req,res,next) {
